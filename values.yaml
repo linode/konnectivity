@@ -1,0 +1,25 @@
+# Default values for konnectivity.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+namespace: "kube-system"
+
+serverNodeSelector:
+  node-role.kubernetes.io/control-plane: ""
+serverTolerations:
+  - key: "node-role.kubernetes.io/control-plane"
+    effect: "NoSchedule"
+serverImage:
+  repository: registry.k8s.io/kas-network-proxy/proxy-server
+  tag: v0.0.37
+  pullPolicy: IfNotPresent
+
+agentNodeSelector:
+agentTolerations:
+agentImage:
+  repository: us.gcr.io/k8s-artifacts-prod/kas-network-proxy/proxy-agent
+  tag: v0.0.37
+  pullPolicy: IfNotPresent
+
+#proxyServerHost: 10.10.10.10
+proxyServerPort: 8132

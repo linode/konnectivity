@@ -1,0 +1,8 @@
+apiVersion: v2
+name: konnectivity
+description: A Helm chart for deploying Konnectivity
+type: application
+version: 0.0.0
+appVersion: "latest"
+maintainers:
+  - name: linode
