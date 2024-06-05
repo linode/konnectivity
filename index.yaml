@@ -2,6 +2,18 @@ apiVersion: v1
 entries:
   konnectivity:
   - apiVersion: v2
+    appVersion: v0.0.1
+    created: "2024-06-05T21:59:10.0528581Z"
+    description: A Helm chart for deploying Konnectivity
+    digest: b007e0f7d3daf7fdc2b0c3dfa4a5ce702582e4b4cefe767f36b018196569a1d8
+    maintainers:
+    - name: linode
+    name: konnectivity
+    type: application
+    urls:
+    - https://github.com/rahulait/konnectivity/releases/download/helm-v0.0.1/konnectivity-v0.0.1.tgz
+    version: v0.0.1
+  - apiVersion: v2
     appVersion: latest
     created: "2024-05-07T06:04:51.308918153Z"
     description: A Helm chart for deploying Konnectivity
@@ -13,4 +25,4 @@ entries:
     urls:
     - https://github.com/rahulait/konnectivity/releases/download/konnectivity-0.0.0/konnectivity-0.0.0.tgz
     version: 0.0.0
-generated: "2024-05-07T06:04:51.308929094Z"
+generated: "2024-06-05T21:59:10.052871585Z"
