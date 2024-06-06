@@ -13,6 +13,8 @@ serverImage:
   repository: registry.k8s.io/kas-network-proxy/proxy-server
   tag: v0.0.37
   pullPolicy: IfNotPresent
+# uncomment and set serverCount based on the number of konnectivity-server pods deployed in case of HA cluster
+#serverCount: 1
 
 agentNodeSelector:
 agentTolerations:
@@ -20,6 +22,7 @@ agentImage:
   repository: us.gcr.io/k8s-artifacts-prod/kas-network-proxy/proxy-agent
   tag: v0.0.37
   pullPolicy: IfNotPresent
+agentReplicas: 3
 
 #proxyServerHost: 10.10.10.10
 proxyServerPort: 8132

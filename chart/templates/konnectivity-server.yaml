@@ -42,6 +42,9 @@ spec:
                 # This needs to be consistent with the value set in egressSelectorConfiguration.
                 "--mode=grpc",
                 "--server-port=0",
+                {{- if .Values.serverCount }}
+                "--server-count={{ .Values.serverCount }}",
+                {{- end }}
                 "--agent-port={{ .Values.proxyServerPort }}",
                 "--admin-port=8133",
                 "--health-port=8134",
@@ -90,60 +93,3 @@ spec:
         hostPath:
           path: /etc/kubernetes/konnectivity-server
           type: DirectoryOrCreate
----
-apiVersion: apps/v1
-kind: DaemonSet
-metadata:
-  labels:
-    addonmanager.kubernetes.io/mode: Reconcile
-    k8s-app: konnectivity-agent
-  namespace: {{ required ".Values.namespace required" .Values.namespace }}
-  name: konnectivity-agent
-spec:
-  selector:
-    matchLabels:
-      k8s-app: konnectivity-agent
-  template:
-    metadata:
-      labels:
-        k8s-app: konnectivity-agent
-    spec:
-      {{- if .Values.agentNodeSelector }}
-      nodeSelector:
-{{ toYaml .Values.agentNodeSelector | indent 8 }}
-      {{- end }}
-      {{- if .Values.agentTolerations }}
-      tolerations:
-{{ toYaml .Values.agentTolerations | indent 8 }}
-      {{- end }}
-      priorityClassName: system-cluster-critical
-      containers:
-        - image: {{ .Values.agentImage.repository }}:{{ .Values.agentImage.tag | default .Chart.AppVersion }}
-          imagePullPolicy: {{ .Values.agentImage.pullPolicy }}
-          name: konnectivity-agent
-          command: ["/proxy-agent"]
-          args: 
-            - --logtostderr=true
-            - --ca-cert=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-            - --proxy-server-host={{ required ".Values.proxyServerHost required" .Values.proxyServerHost }}
-            - --proxy-server-port={{ .Values.proxyServerPort }}
-            - --admin-server-port=8133
-            - --health-server-port=8134
-            - --service-account-token-path=/var/run/secrets/tokens/konnectivity-agent-token
-          volumeMounts:
-            - mountPath: /var/run/secrets/tokens
-              name: konnectivity-agent-token
-          livenessProbe:
-            httpGet:
-              port: 8134
-              path: /healthz
-            initialDelaySeconds: 15
-            timeoutSeconds: 15
-      serviceAccountName: konnectivity-agent
-      volumes:
-        - name: konnectivity-agent-token
-          projected:
-            sources:
-              - serviceAccountToken:
-                  path: konnectivity-agent-token
-                  audience: system:konnectivity-server
